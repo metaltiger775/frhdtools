@@ -5,7 +5,7 @@
 
 from setuptools import setup, find_packages
 
-versionFile = "0.0.4.1"
+version = "0.0.4.1"
 setup(name="frhdtools",
     version=open(versionFile).read(),
     description="Library to work with Free Rider HD Tracks",

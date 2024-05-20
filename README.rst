@@ -20,6 +20,8 @@ Install
 
 Fire up a terminal and run:
 
+``pip install git+https://github.com/metaltiger775/frhdtools -U``
+OR
 ``pip install frhdtools``
 
 You should be good to go.

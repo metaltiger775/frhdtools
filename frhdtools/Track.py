@@ -39,57 +39,30 @@ class Track():
     def insBoost(self,x,y,rot):
         assert rot in range(360)
         self.tracklist[2] += [['B',x,y,rot]]
-
+    
     def genCode(self):
-        self.trackdatalist = [[], [], []]  # holds raw data to be joined into frhd text
+        self.trackdatalist = [[],[],[]] #holds raw data to be joined into frhd text
 
-        # Parallelize the encoding of lines and powerups
-        with ThreadPoolExecutor() as executor:
-            # Physics lines
-            physics_lines = [executor.submit(En.encline, line[0], line[1], line[2], line[3]) for line in self.tracklist[0]]
-            self.trackdatalist[0] = list(chain(*[future.result() for future in physics_lines]))
+        for pline in self.tracklist[0]: #physics
+            self.trackdatalist[0] += En.encline(pline[0],pline[1],pline[2],pline[3])
 
-            # Scenery lines
-            scenery_lines = [executor.submit(En.encline, line[0], line[1], line[2], line[3]) for line in self.tracklist[1]]
-            self.trackdatalist[1] = list(chain(*[future.result() for future in scenery_lines]))
+        for sline in self.tracklist[1]: #scenery
+            self.trackdatalist[1] += En.encline(sline[0],sline[1],sline[2],sline[3])
 
-            # Powerups
-            powerups = []
-            for pup in self.tracklist[2]:
-                if len(pup) == 3:  # if powerup does not have the rotation attribute
-                    powerups.append(executor.submit(En.encpup, pup[1], pup[2], pup[0]))
-                elif len(pup) == 4:  # if powerup does have rotation attribute
-                    powerups.append(executor.submit(En.encpupr, pup[1], pup[2], pup[3], pup[0]))
-            self.trackdatalist[2] = list(chain(*[future.result() for future in powerups]))
+        for pup in self.tracklist[2]: #powerups
+            if len(pup) == 3: #if powerup does not have the rotation attribute
+                self.trackdatalist[2] += En.encpup(pup[1],pup[2],pup[0])
+            if len(pup) == 4: #if powerup does have rotation attribute
+                self.trackdatalist[2] += En.encpupr(pup[1],pup[2],pup[3],pup[0])
 
-        self.finalData = '#'.join(line for typ in self.trackdatalist for line in typ)
+        self.finalData = '' #this will be put into frhd
+
+        for typ in self.trackdatalist: #type of object
+            for indiv in typ: #individual object
+                self.finalData += indiv[0]
+            self.finalData += '#'#add object end marker
 
         return self.finalData
-
-    
-    #def genCode(self):
-        #self.trackdatalist = [[],[],[]] #holds raw data to be joined into frhd text
-
-        #for pline in self.tracklist[0]: #physics
-        #    self.trackdatalist[0] += En.encline(pline[0],pline[1],pline[2],pline[3])
-
-        #for sline in self.tracklist[1]: #scenery
-        #    self.trackdatalist[1] += En.encline(sline[0],sline[1],sline[2],sline[3])
-
-        #for pup in self.tracklist[2]: #powerups
-        #    if len(pup) == 3: #if powerup does not have the rotation attribute
-        #        self.trackdatalist[2] += En.encpup(pup[1],pup[2],pup[0])
-        #    if len(pup) == 4: #if powerup does have rotation attribute
-        #        self.trackdatalist[2] += En.encpupr(pup[1],pup[2],pup[3],pup[0])
-
-        #self.finalData = '' #this will be put into frhd
-
-        #for typ in self.trackdatalist: #type of object
-        #    for indiv in typ: #individual object
-        #        self.finalData += indiv[0]
-        #    self.finalData += '#'#add object end marker
-
-        #return self.finalData
 
 if __name__ == '__main__':
     my_track = Track()

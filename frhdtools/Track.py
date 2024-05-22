@@ -43,7 +43,7 @@ class Track():
     def genCode(self):
         self.trackdatalist = [[],[],[]] #holds raw data to be joined into frhd text
 
-        total = len(self.tracklist[0] + len(self.tracklist[1]) + len(self.tracklist[2])
+        total = len(self.tracklist[0] + len(self.tracklist[1]) + len(self.tracklist[2]))
         with tqdm(total=total) as pbar:
             for pline in self.tracklist[0]: #physics
                 pbar.n.update(len(self.tracklist[0]) + len(self.tracklist[1]) + len(self.tracklist[2]) - pbar.n)

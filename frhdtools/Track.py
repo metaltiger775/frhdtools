@@ -21,10 +21,10 @@ class Track():
             self.tracklist[1] += [[x1,y1,x2,y2]]
 
     def insStar(self,x,y):
-        self.tracklist[2] += [['C',x,y]]
+        self.tracklist[2] += [['T',x,y]]
 
     def insCheck(self,x,y):
-        self.tracklist[2] += [['T',x,y]]
+        self.tracklist[2] += [['C',x,y]]
 
     def insSlowMo(self,x,y):
         self.tracklist[2] += [['S',x,y]]

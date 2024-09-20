@@ -6,6 +6,7 @@
 from frhdtools import Encode as En #import Encode.py (for encoding base32)
 from concurrent.futures import ThreadPoolExecutor
 from itertools import chain
+from tqdm import tqdm
 
 class Track():
     """Create a freerider track instance."""
@@ -57,12 +58,13 @@ class Track():
 
         self.finalData = '' #this will be put into frhd
 
-        for typ in self.trackdatalist: #type of object
+        for typ in tqdm(self.trackdatalist): #type of object
             for indiv in typ: #individual object
                 self.finalData += indiv[0]
             self.finalData += '#'#add object end marker
 
         return self.finalData
+        
 
 if __name__ == '__main__':
     my_track = Track()
